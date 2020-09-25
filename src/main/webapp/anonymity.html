@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>匿名投诉</title>
+    <link rel="stylesheet" href="media/layui/css/layui.css">
+</head>
+<body>
+<form>
+    <table>
+        <tr>
+            <td><label class="col-sm-2 control-label no-padding-right" style="color:red"> 投诉内容： </label></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><textarea placeholder="本投诉是匿名投诉，不会暴露您的信息" style="width:592px;height:150px;" id="content" name="content"></textarea></td>
+        </tr>
+    </table>
+
+    <button type="submit" class="layui-btn">提交</button>
+</form>
+
+<script src="media/layui/layui.js"></script>
+<script src="media/js/jquery.min.js"></script>
+<script>
+
+    $("form").submit(function () {
+        $.ajax({
+            type:"get",
+            url:"http://localhost:8080/OaNew/anonymity/add.do",
+            data:$("form").serialize(),
+            success:function (data) {
+                alert(data.info)
+                window.location.reload()
+            }
+        })
+        return false
+    })
+
+</script>
+
+<!--表格的展示-->
+<div id="table">
+    <table class="layui-hide" id="test" lay-filter="test"></table>
+</div>
+
+<script>
+    layui.use(['table', 'laydate', "laypage", "layer", 'carousel', 'upload', 'element'], function(){
+        //初始化table组件对象
+        var table = layui.table
+            ,laypage =layui.laypage//分页的组件
+            ,layer = layui.layer//弹框
+            ,laydate = layui.laydate//日期组件
+            ,element = layui.element;//元素的操作
+
+        //渲染table
+        table.render({
+            //z找到table  id叫test的组件
+            elem: '#test'
+            ,id:"table"
+            ,url:"anonymity/queryAnonymity.do"
+            ,totalRow: true
+            //这个很关键，就是解析 json数据库中数据的 一定要注意键值
+            ,cols: [[
+                {field:'id', title:'编号', unresize: true, sort: true, fixed:"left"}
+                ,{field:'content', title:'投诉内容'}
+                ,{field:'u_no', title:'学号'}
+            ]]
+            ,page: true //分页开启
+
+
+        });
+
+    });
+</script>
+
+</body>
+</html>

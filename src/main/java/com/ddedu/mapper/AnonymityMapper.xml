@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ddedu.dao.AnonymityDao">
+    <insert id="add" parameterType="com.ddedu.entity.Anonymity">
+        insert into t_anonymity (content, u_no)
+        VALUES (#{content}, #{u_no})
+    </insert>
+
+    <select id="select" resultType="com.ddedu.entity.Anonymity">
+        select * from t_anonymity
+    </select>
+
+</mapper>

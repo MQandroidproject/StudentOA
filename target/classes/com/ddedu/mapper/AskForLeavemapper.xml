@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ddedu.dao.AskForLeaveDao">
+        <insert id="insertAskForLeave" parameterType="com.ddedu.entity.AskForLeave">
+            insert into t_askforleave(
+            <trim suffixOverrides=",">   <!--去除指定的后缀 ， -->
+                <if test="sid != null"> sid, </if>
+                <if test="startTime != null"> startTime, </if>
+                <if test="endTime != null"> endTime, </if>
+                <if test="count != null"> count, </if>
+                <if test="status != null"> status, </if>
+                <if test="reason != null"> reason, </if>
+            </trim>
+            ) values (
+            <trim suffixOverrides=",">   <!--去除指定的后缀 ， -->
+                <if test="sid != null"> #{sid}, </if>
+                <if test="startTime != null"> #{startTime}, </if>
+                <if test="endTime != null"> #{endTime}, </if>
+                <if test="count != null"> #{count}, </if>
+                <if test="status != null"> #{status}, </if>
+                <if test="reason != null"> #{reason}</if>
+            </trim>
+            )
+        </insert>
+</mapper>

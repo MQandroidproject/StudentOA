@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="Ticktack_Office:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>Ticktack_Office</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="OaNew.war">
+      <element id="artifact" artifact-name="Ticktack_Office:war exploded" />
+    </root>
+  </artifact>
+</component>

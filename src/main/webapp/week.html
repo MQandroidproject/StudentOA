@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>学员周报</title>
+    <link rel="stylesheet" href="media/layui/css/layui.css">
+</head>
+<body>
+<form action="" type="get">
+    <table>
+        <tr>
+            <td><label style="color:red"> 学员姓名： </label></td>
+            <td><span id="uname"></span></td>
+        </tr>
+
+        <tr>
+            <td><label style="color:red"> 周报标题： </label></td>
+            <td><input type="text" placeholder="请输入标题" name="title"></td>
+        </tr>
+        <tr>
+            <td><label style="color:red"> 周报内容： </label></td>
+        </tr>
+
+        <tr>
+            <td></td>
+            <td><textarea placeholder="请输入周报内容" style="width:592px;height:150px;" id="content" name="content"></textarea></td>
+        </tr>
+    </table>
+
+    <button type="submit" class="layui-btn">添加</button>
+   <!-- <div class="layui-btn-group">
+
+        <button type="button" class="layui-btn">返回</button>
+    </div>-->
+</form>
+<script src="media/layui/layui.js"></script>
+<script src="media/js/jquery.min.js"></script>
+<script>
+
+    $("form").submit(function () {
+        $.ajax({
+            type:"get",
+            url:"http://localhost:8080/OaNew/week/add.do",
+            data:$("form").serialize(),
+            success:function (data) {
+               alert(data.info)
+                window.location.reload()
+            }
+        })
+        return false
+    })
+
+    $(function () {
+        $.ajax({
+                type: "get",
+                url: "http://localhost:8080/OaNew/user/query.do",
+                dataType: "json",
+                success: function(data) {
+                console.log(data)
+                if (data.code == 1) {
+                    $("#uname").html(data.info)
+                } else {
+                    layer.msg("获取数据异常")
+                }
+            }
+        })
+    })
+</script>
+
+<!--表格的展示-->
+<div id="table">
+    <table class="layui-hide" id="test" lay-filter="test"></table>
+</div>
+<!--工具条的显示-->
+<script type="text/html" id="barDemo">
+    <button class="layui-btn" lay-event="update">修改</button>
+    <button class="layui-btn" lay-event="del">删除</button>
+    <!--  <a class="layui-btn layui-btn-xs" lay-event="edit">预定</a>-->
+    <!--<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>-->
+</script>
+
+
+<script>
+    layui.use(['table', 'laydate', "laypage", "layer", 'carousel', 'upload', 'element'], function(){
+        //初始化table组件对象
+        var table = layui.table
+            ,laypage =layui.laypage//分页的组件
+            ,layer = layui.layer//弹框
+            ,laydate = layui.laydate//日期组件
+            ,element = layui.element;//元素的操作
+
+        //渲染table
+        table.render({
+            //z找到table  id叫test的组件
+            elem: '#test'
+            ,id:"table"
+            ,url:"week/queryWeek.do"
+            ,totalRow: true
+            //这个很关键，就是解析 json数据库中数据的 一定要注意键值
+            ,cols: [[
+                {field:'id', title:'编号', unresize: true, sort: true, fixed:"left"}
+                ,{field:'title', title:'标题'}
+                ,{field:'content', title:'内容'}
+                ,{field:'status', title:'状态', sort: true}
+                ,{field:'createTime', title:'创建时间'}
+                ,{field:'u_no', title:'学号'}
+                ,{fixed: 'right', title:'操作', toolbar: '#barDemo'}
+            ]]
+            ,page: true //分页开启
+
+
+        });
+
+        /*监听行工具事件*/
+        table.on('tool(test)',function (obj) {
+            var data = obj.data;
+            console.log(data)
+            if (obj.event === 'del') {
+                var getid = window.location.search
+                //window.location.href = "http://localhost:8080/carsys/order/deleteById.do?id="+ data.id
+
+                $.ajax({
+                    type:"get",
+                    url:"week/deleteById.do?id="+ data.id,
+                    dataType:"json",
+                    success:function(data){
+                        alert(data.info);
+                        window.location.href="http://localhost:8080/OaNew/week.html";
+                    },
+                    error : function(){
+                        alert("ajax加载失败");
+                    }
+
+                })
+
+                //window.location.href = "http://localhost:8080/carsys/mymain/mymain.html?id=" + data.id
+            }
+
+            if (obj.event === 'update') {
+               /* $.ajax({
+                    type:"get",
+                    url:"week/update.do?id="+ data.id,
+                    dataType:"json",
+                    success:function(data){
+                        alert(data.info);
+                        window.location.href="http://localhost:8080/OaNew/week.html";
+                    },
+                    error : function(){
+                        alert("ajax加载失败");
+                    }
+
+                })*/
+
+                window.location.href = "weekUpdate.html?id=" + data.id
+            }
+        })
+
+    });
+</script>
+
+</body>
+</html>

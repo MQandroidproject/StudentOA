@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ddedu.dao.DepartDao">
+    <insert id="addDepart" parameterType="com.ddedu.entity.Depart">
+        insert into t_depart (name,createtime ,num,flag) values (#{name},#{createtime},1,1)
+    </insert>
+
+    <select id="selectAll" resultType="com.ddedu.entity.Depart">
+        select * from t_depart where flag = 1
+    </select>
+
+    <update id="deleteOne" parameterType="int">
+        update t_depart set flag = 2 where id = #{id}
+    </update>
+
+    <update id="updateOne" parameterType="com.ddedu.entity.Depart">
+        update  t_depart set name = #{name} where id = #{id}
+
+    </update>
+</mapper>

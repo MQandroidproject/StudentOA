@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ddedu.dao.SkillDao">
+    <insert id="add" parameterType="com.ddedu.entity.Skill">
+        insert into t_skill (content, createTime, u_no)
+        VALUES (#{content}, now(), #{u_no});
+    </insert>
+
+    <select id="select" resultType="com.ddedu.entity.Skill">
+        select * from t_skill
+    </select>
+</mapper>

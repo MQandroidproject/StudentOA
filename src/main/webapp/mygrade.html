@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>东单办公系统-班级学生</title>
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<link rel="stylesheet" href="media/layui/css/layui.css" media="all">
+<script src="media/layui/layui.js"></script>
+<script type="text/javascript" src="media/js/jquery.min.js"></script>
+
+</head>
+
+<body>
+<!--表格的展示-->
+<div id="content">
+	<table class="layui-hide" id="test" lay-filter="test"></table>
+</div>
+	<!--<div class="layui-container" style="margin-top: 20px">
+		<div id="tdata"></div>
+
+	</div>-->
+
+
+<!--<script type="text/javascript">
+	$(function() {
+		$.ajax({
+			type: "get",
+			url: "http://localhost:8080/OaNew/user/querystudentbycno.do",
+			dataType: "json",
+			success: function (data) {
+				var obj = data;
+				console.log(obj);
+				if (obj.code == 1) {
+					var arr = obj.data;
+					console.log(arr);
+					showData(arr);
+				}
+			}
+		})
+
+	})
+	function showData(arr) {
+		$("#tdata").append("<p>");
+		for (var i = 0; i < arr.length; i++) {
+			if ((i + 1) % 5 == 0) {
+				$("#tdata").append(
+						"</p><p><input type='button' value='"+arr[i].name+"'>");
+			} else {
+				$("#tdata").append(
+						"<input type='button' value='"+arr[i].name+"'>");
+			}
+		}
+		$("#tdata").append("</p>");
+
+	}
+</script>-->
+
+<script>
+	layui.use(['table', 'laydate', "laypage", "layer", 'carousel', 'upload', 'element'], function(){
+		//初始化table组件对象
+		var table = layui.table
+				,laypage =layui.laypage//分页的组件
+				,layer = layui.layer//弹框
+				,laydate = layui.laydate//日期组件
+				,element = layui.element;//元素的操作
+
+		//渲染table
+		table.render({
+			//z找到table  id叫test的组件
+			elem: '#test'
+			,id:"transferTable"
+			,url:"user/querystudentbycno.do"
+			,totalRow: true
+			//这个很关键，就是解析 json数据库中数据的 一定要注意键值
+			,cols: [[
+				{field:'u_no', title:'学号', width:100,  unresize: true, sort: true, fixed:"left"}
+				,{field:'name', title:'名字', width:100}
+				,{field:'sex', title:'性别', width:100}
+				,{field:'schoolname', title:'学校名字', width:150, sort: true}
+				,{field:'phone', title:'手机', width:150}
+				,{field:'email', title:'邮箱', width:150}
+				,{field:'qq', title:'qq', width:150}
+				,{field:'g_name', title:'班级名称', width:150}
+			]]
+			,page: true //分页开启
+
+
+		});
+
+	});
+</script>
+
+<!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+<div id="main" style="width: 600px;height:400px;"></div>
+<script src="media/js/echarts.min.js"></script>
+<script type="text/javascript">
+
+	$(function () {
+		loadEcharts();
+	})
+	// 基于准备好的dom，初始化echarts实例
+	var myChart = echarts.init(document.getElementById('main'));
+
+	// 指定图表的配置项和数据
+	var option = {
+		title: {
+			text: "男女比例",
+			link: "http://www.baidu.com"
+		},
+		/* 设置鼠标经过百分比提示 */
+		tooltip: {
+			trigger: 'item',
+			formatter: "{a} <br/>{b} : {c} ({d}%)"
+		},
+		//图例
+		legend:{
+			orient:'vertical',
+			left:'right',
+			data:['男','女']
+		},
+		series: [{
+			name: '男女比例',
+			type: 'pie',
+			radius: '55%',
+			data: [
+				{name: '男',value: 21},
+				{name: '女',value: 21}
+			]
+		}]
+	}
+
+	// 使用刚指定的配置项和数据显示图表。
+	myChart.setOption(option);
+
+	function loadEcharts(){
+		// $.get()
+		// $.post();
+		$.ajax({
+			url:"http://localhost:8080/OaNew/user/echarts.do",
+			method:"get",
+			success:function(r){
+				console.log(r.info)
+				//alert(r.info)
+				//option1.xAxis.data=r.depts;
+				option.series[0].data=r.info;
+				console.log(option);
+				myChart.setOption(option);
+			}
+		})
+	}
+</script>
+</body>
+</html>

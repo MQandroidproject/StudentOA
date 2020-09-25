@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>东单办公系统-修改日志</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="media/layui/css/layui.css" media="all">
+</head>
+<body>
+
+<div class="layui-container" style="margin-top: 20px">
+    <form class="layui-form" method="post">
+        <table>
+            <tr>
+                <td>
+                    <label class="layui-form-label">标题</label>
+                </td>
+                <td>
+                    <input type="text" name="title" id="f1" placeholder="请输入标题"
+                           class="layui-input">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label class="layui-form-label">内容</label>
+                </td>
+                <td>
+                    <input type="text" name="content" id="f2" placeholder="请输入内容"
+                           class="layui-input">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label class="layui-form-label">状态</label>
+                </td>
+                <td>
+                    <input type="text" name="status" id="f3" placeholder="请输入状态"
+                           class="layui-input">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label class="layui-form-label">创建时间</label>
+                </td>
+                <td>
+                    <input type="text" name="createTime" id="f4" placeholder="请输入创建时间"
+                           class="layui-input">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label class="layui-form-label">学号</label>
+                </td>
+                <td>
+                    <input type="text" name="u_no" id="f5" placeholder="请输入学号"
+                           class="layui-input">
+                </td>
+            </tr>
+
+        </table>
+            <div class="layui-form-item">
+                <input class="layui-btn" type="submit" value="确认修改">
+            </div>
+    </form>
+</div>
+
+
+<script src="media/layui/layui.js"></script>
+<script src="media/js/jquery.min.js"></script>
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<script>
+    layui.use(['form'], function () {
+        var form = layui.form, layer = layui.layer;
+
+    });
+
+
+    $("form").submit(function () {
+        var id = window.location.search
+        //alert(id)
+        $.ajax({
+            type: "get",
+            data: $("form").serialize(),
+            url: "week/update.do" + id,
+            //success里面的内容没有执行
+            success: function(data) {
+                alert(data.info);
+                window.location.href = "http://localhost:8080/OaNew/week.html";
+            }
+        })
+    });
+
+</script>
+
+<script>
+    $(function(){
+        var id = window.location.search;
+        //alert(id)
+        $.ajax({
+            type: "get",
+            url: "http://localhost:8080/OaNew/week/queryWeekById.do" + id,
+            dataType: "json",
+            success: function (data) {
+                console.log(data)
+                if (data.code == 1) {
+                    $("#f1").val(data.info.title)
+                    $("#f2").val(data.info.content)
+                    $("#f3").val(data.info.status)
+                    $("#f4").val(data.info.createTime)
+                    $("#f5").val(data.info.u_no)
+                } else {
+                    layer.msg("获取数据异常")
+                }
+            }
+        })
+    })
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>添加习题</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="media/layui/css/layui.css"  media="all">
+    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+</head>
+<body background="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=359624588,257123124&fm=16&gp=0.jpg"
+      style="background-repeat: no-repeat; background-size: 100% 100%; background-attachment: fixed">
+
+<form class="layui-form" >
+    <div class="layui-form-item">
+        <br>
+        <br>
+        <label class="layui-form-label">习题种类</label>
+        <div class="layui-input-block" style="width: 85px">
+            <select name="category" lay-filter="aihao">
+                <option value=""></option>
+                <option value="C">C</option>
+                <option value="JAVA" selected="">JAVA</option>
+                <option value="HTML">HTML</option>
+                <option value="PHP">PHP</option>
+                <option value="云计算">云计算</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">请输入问题</label>
+        <div class="layui-input-block">
+            <textarea id="equestion" placeholder="请输入内容" class="layui-textarea"></textarea>
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">请输入答案</label>
+        <div class="layui-input-block">
+            <textarea id="eanswer" placeholder="请输入内容" class="layui-textarea"></textarea>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+            <!--        <button type="reset" class="layui-btn layui-btn-primary">重置</button>-->
+        </div>
+    </div>
+
+</form>
+<script src="media/layui/layui.js" charset="utf-8"></script>
+<script type="text/javascript" src="media/js/jquery.min.js"></script>
+
+<script>
+    layui.use(['form', 'layedit', 'laydate'], function() {
+        var form = layui.form
+            , layer = layui.layer
+            , layedit = layui.layedit
+            , laydate = layui.laydate;
+
+
+        //监听提交
+        form.on('submit(demo1)', function (data) {
+            // layer.alert(JSON.stringify(data.field), {
+            //     title: '最终的提交信息'
+
+            var equestion = $("#equestion").val()
+            var eanswer =  $("#eanswer").val()
+            // console.log(equestion)
+            // console.log(data.field)
+            // console.log(eanswer)
+            $.ajax({
+                type: "post",
+                url: "exer/add.do?equestion=" + equestion + "&eanswer=" + eanswer,
+                data: data.field,
+                dataType: "json",
+                success: function (data) {
+                    if (data.code == 1) {
+                        alert("添加成功")
+                        window.location.href = "exercisesadd.html";
+                    }
+                }
+            })
+            return false;
+        })
+
+
+    });
+</script>
+
+</body>
+</html>

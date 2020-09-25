@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ddedu.dao.ExercisesDao">
+    <insert id="addExercises" parameterType="com.ddedu.entity.Exercises">
+        insert into t_exercises (category, equestion, eanswer)
+         values (#{category}, #{equestion}, #{eanswer})
+    </insert>
+    <select id="selectExercises" resultType="com.ddedu.entity.Exercises">
+        select * from t_exercises
+    </select>
+    <delete id="deleteByEid" parameterType="int" >
+         delete from t_exercises
+    where id = #{id}
+    </delete>
+</mapper>

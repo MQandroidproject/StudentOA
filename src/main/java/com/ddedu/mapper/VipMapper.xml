@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ddedu.dao.VipDao">
+    <insert id="add" parameterType="com.ddedu.entity.Vip">
+        insert into t_vip (content, u_no)
+        VALUES (#{content}, #{u_no})
+    </insert>
+
+    <select id="select" resultType="com.ddedu.entity.Vip">
+        select * from t_vip
+    </select>
+</mapper>

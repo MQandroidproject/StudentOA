@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link rel="stylesheet" href="media/layui/css/layui.css" media="all">
+    <script src="media/layui/layui.js"></script>
+    <script src="media/js/echarts.min.js"></script>
+    <script src="media/js/jquery-3.3.1.js"></script>
+    <style>
+        #dvtbusers{
+            width: 80%;
+            height: 500px;
+        }
+    </style>
+</head>
+<body>
+<div  id="dvtbusers" ></div>
+    <script>
+
+        var echarts1=echarts.init(document.getElementById("dvtbusers"));
+
+        $(function () {
+            loadEcharts();
+        })
+
+        var option1={
+            title:{
+                text:"资源分布",
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['资源数量']
+            },
+            toolbox: {
+                show: true,
+                feature: {
+                    dataZoom: {
+                        yAxisIndex: 'none'
+                    },
+                    dataView: {readOnly: false},
+                    magicType: {type: ['line', 'bar']},
+                    restore: {},
+                    saveAsImage: {}
+                }
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: []
+            },
+            yAxis: {
+                type: 'value',
+                axisLabel: {
+                    formatter: '{value}'
+                }
+            },
+            series: [
+                {
+                    name: '资源数量',
+                    type: 'line',
+                    data: [],
+                }
+            ]
+        }
+        echarts1.setOption(option1);
+
+
+        function loadEcharts(){
+            $.ajax({
+                url:"OaNew/echarts.do",
+                method:"get",
+                success:function(r){
+                    console.log(r);
+                    option1.xAxis.data=r.qtypes;
+                    option1.series[0].data=r.cts;
+                    console.log(option1);
+                    echarts1.setOption(option1);
+                }
+            })
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="media/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="media/css/font-awesome.min.css" media="all">
+    <link rel="stylesheet" href="media/layui/css/layui.css" media="all">
+    <script src="media/js/echarts.min.js"></script>
+    <script src="media/js/jquery.min.js"></script>
+
+    <style>
+        .info-box {
+            height: 85px;
+            background-color: white;
+            background-color: #ecf0f5;
+        }
+
+        .info-box .info-box-icon {
+            border-top-left-radius: 2px;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+            border-bottom-left-radius: 2px;
+            display: block;
+            float: left;
+            height: 85px;
+            width: 85px;
+            text-align: center;
+            font-size: 45px;
+            line-height: 85px;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .info-box .info-box-content {
+            padding: 5px 10px;
+            margin-left: 85px;
+        }
+
+        .info-box .info-box-content .info-box-text {
+            display: block;
+            font-size: 14px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-transform: uppercase;
+        }
+
+        .info-box .info-box-content .info-box-number {
+            display: block;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        /*.major {*/
+        /*	font-weight: 11px;*/
+        /*	color: #01AAED;*/
+        /*}*/
+
+        .main {
+            margin-top: 25px;
+        }
+
+        .main .layui-row {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+
+<body>
+<div class="layui-fluid main">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md3">
+            <div class="info-box">
+					<span class="info-box-icon"
+                          style="background-color: #00c0ef !important; color: white;">
+						<i class="fa fa-child"></i>
+					</span>
+                <div class="info-box-content">
+                    员工总数<span class="info-box-number" id="s1">13</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-md3">
+            <div class="info-box">
+					<span class="info-box-icon"
+                          style="background-color: #00a65a !important; color: white;"><i
+                            class="fa fa-users" aria-hidden="true"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">出勤人数</span> <span
+                        class="info-box-number" id="s3">65</span>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md3">
+            <div class="info-box">
+					<span class="info-box-icon"
+                          style="background-color: #f39c12 !important; color: white;"><i
+                            class="fa fa-users" aria-hidden="true"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">所在部门</span> <span
+                        class="info-box-number" id="s4">zz2003</span>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md3">
+            <div class="info-box">
+					<span class="info-box-icon"
+                          style="background-color: #dd4b39 !important; color: white;"><i
+                            class="fa fa-graduation-cap" aria-hidden="true"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">部门总数</span> <span
+                        class="info-box-number" id="s5">2020-11-04</span>
+                </div>
+            </div>
+        </div>
+        <div class="layui-container">
+            <table id="tbdata" lay-filter="tbop">
+
+            </table>
+            <div id="dvtbusers" style="width: 800px;height: 500px;margin-top: 20%"></div>
+        </div>
+    </div>
+
+</div>
+<script src="media/layui/layui.js"></script>
+<script>
+    layui.use('table', function () {
+        var table = layui.table;
+
+        table.render({
+            elem: '#test',
+            height: 400,
+            url: 'findByNo.do',
+
+        })
+    })
+    var echarts = echarts.init(document.getElementById("dvtbusers"));
+
+    var option = {
+        title: {
+            text: "各部门人数",
+            link: "http://www.baidu.com"
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            data: ['部门人数'],
+            top:"5%"
+
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                dataZoom: {
+                    yAxisIndex: 'none'
+                },
+                dataView: {readOnly: false},
+                magicType: {type: ['line', 'bar']},
+                restore: {},
+                saveAsImage: {}
+            }
+        },
+        xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+        },
+        yAxis: {
+            type: 'value',
+            axisLabel: {
+                formatter: '{value}'
+            }
+        },
+        series: [
+            {
+                name: '部门人数',
+                type: 'line',
+                data: [11, 11, 15, 13, 12, 13, 10],
+            }
+        ]
+    }
+    echarts.setOption(option);
+    $(function () {
+        $.ajax({
+            type:"get",
+            url:"groupByDept.do",
+            dataType:"json",
+            success:function(data){
+                console.log(data)
+                var b=0;
+                for (var i = 0; i <data.num.length ; i++) {
+                    b+=data.num[i]
+                }
+                $("#s3").html(b)
+                $("#s1").html(b)
+                $("#s5").html(data.types.length)
+                option.xAxis.data=data.types;
+                option.series[0].data=data.num;
+                console.log(option)
+                echarts.setOption(option)
+            }
+        })
+    })
+
+</script>
+<!--	<script>-->
+<!--	&lt;!&ndash;		layui.use('table', function() {&ndash;&gt;-->
+<!--	&lt;!&ndash;			var table = layui.table;&ndash;&gt;-->
+
+<!--	&lt;!&ndash;			var table = layui.table;&ndash;&gt;-->
+
+<!--	&lt;!&ndash;			//第一个实例&ndash;&gt;-->
+<!--	&lt;!&ndash;			table.render({&ndash;&gt;-->
+<!--	&lt;!&ndash;				elem : '#tbdata',&ndash;&gt;-->
+<!--	&lt;!&ndash;				height : 400,&ndash;&gt;-->
+<!--	&lt;!&ndash;				url : 'loginlogpage.do' //数据接口&ndash;&gt;-->
+<!--	&lt;!&ndash;				,&ndash;&gt;-->
+<!--	&lt;!&ndash;				page : true //开启分页&ndash;&gt;-->
+<!--	&lt;!&ndash;				,&ndash;&gt;-->
+<!--	&lt;!&ndash;				cols : [ [ //表头&ndash;&gt;-->
+<!--	&lt;!&ndash;				{&ndash;&gt;-->
+<!--	&lt;!&ndash;					field : 'no',&ndash;&gt;-->
+<!--	&lt;!&ndash;					title : '登录账户'&ndash;&gt;-->
+<!--	&lt;!&ndash;				}, {&ndash;&gt;-->
+<!--	&lt;!&ndash;					field : 'ip',&ndash;&gt;-->
+<!--	&lt;!&ndash;					title : '登录IP'&ndash;&gt;-->
+<!--	&lt;!&ndash;				}, {&ndash;&gt;-->
+<!--	&lt;!&ndash;					field : 'location',&ndash;&gt;-->
+<!--	&lt;!&ndash;					title : '登录城市'&ndash;&gt;-->
+<!--	&lt;!&ndash;				}, {&ndash;&gt;-->
+<!--	&lt;!&ndash;					field : 'createtime',&ndash;&gt;-->
+<!--	&lt;!&ndash;					title : '登录时间',&ndash;&gt;-->
+<!--	&lt;!&ndash;					sort : true&ndash;&gt;-->
+<!--	&lt;!&ndash;				} ] ]&ndash;&gt;-->
+<!--	&lt;!&ndash;			});&ndash;&gt;-->
+
+<!--	&lt;!&ndash;		});&ndash;&gt;-->
+<!--	&lt;!&ndash;	</script>&ndash;&gt;<-->
+</body>
+
+</html>

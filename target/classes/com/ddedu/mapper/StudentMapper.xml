@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ddedu.dao.StudentDao">
+    <!-- 添加学生信息 -->
+    <insert id="insertStudentOne" parameterType="com.ddedu.entity.Student">
+        insert into t_student(
+        <trim suffixOverrides=",">   <!--去除指定的后缀 ， -->
+            <if test="u_no != null"> u_no, </if>
+            <if test="name != null"> name, </if>
+            <if test="sex != null"> sex, </if>
+            <if test="birthday != null"> birthday, </if>
+            <if test="cardno != null"> cardno, </if>
+            <if test="schoolname != null"> schoolname, </if>
+            <if test="education != null"> education, </if>
+            <if test="phone != null"> phone, </if>
+            <if test="email != null"> email, </if>
+            <if test="qq != null"> qq, </if>
+            <if test="cno != null"> cno, </if>
+            <if test="introno != null"> introno, </if>
+            <if test="flag != null"> flag, </if>
+            <if test="entrytime != null"> entrytime, </if>
+            <if test="g_name != null"> g_name,</if>
+        </trim>
+        ) values (
+        <trim suffixOverrides=",">   <!--去除指定的后缀 ， -->
+            <if test="u_no != null"> #{u_no}, </if>
+            <if test="name != null"> #{name}, </if>
+            <if test="sex != null"> #{sex}, </if>
+            <if test="birthday != null"> #{birthday}, </if>
+            <if test="cardno != null"> #{cardno}, </if>
+            <if test="schoolname != null"> #{schoolname}, </if>
+            <if test="education != null"> #{education}, </if>
+            <if test="phone != null"> #{phone}, </if>
+            <if test="email != null"> #{email}, </if>
+            <if test="qq != null"> #{qq}, </if>
+            <if test="cno != null"> #{cno}, </if>
+            <if test="introno != null"> #{introno}, </if>
+            <if test="flag != null"> #{flag}, </if>
+            <if test="entrytime != null"> #{entrytime}, </if>
+            <if test="g_name != null"> #{g_name}</if>
+        </trim>
+        )
+    </insert>
+
+    <!-- 根据name查询学生的id  用来请假申请添加请假人的id -->
+    <select id="selectIdByName" parameterType="string" resultType="int">
+        select id from t_student where name = #{name}
+    </select>
+
+    <!-- 班级有多少名学生的图表 -->
+    <select id="selectStuAndGrade" resultType="com.ddedu.dto.StudentGrade">
+        select g.name grade ,count(*) count from t_student s join t_grade g on s.cno = g.id GROUP BY cno ORDER BY s.cno
+    </select>
+</mapper>

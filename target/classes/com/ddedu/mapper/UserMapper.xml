@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ddedu.dao.UserDao">
+    <select id="selectNameByNo" parameterType="string" resultType="string">
+    select t_student.name from t_user
+    inner join t_student on t_user.no= t_student.u_no
+    where no = #{no}
+    </select>
+
+    <select id="selectStudentByNo" parameterType="string" resultType="com.ddedu.vo.VoStudent">
+        select t_student.u_no id, t_student.name sname, t_course.name cname, t_student.sex sex, t_student.birthday birthday,
+       t_student.email email,t_student.phone phone, t_student.qq qq, t_student.schoolname schoolname,
+       t_student.education education from t_user
+        inner join t_student on t_user.no= t_student.u_no
+        inner join t_course on t_student.cno = t_course.id
+        where no = #{no}
+    </select>
+
+    <select id="selectStudentByNo2" parameterType="string" resultType="com.ddedu.entity.Student">
+        select t_student.* from t_user
+inner join t_student on t_user.no= t_student.u_no
+where no = #{no}
+    </select>
+
+    <select id="selectStudentByCno" parameterType="string" resultType="com.ddedu.entity.Student">
+        select ts.* from t_student ts
+        inner join t_course tc on ts.cno = tc.id
+        where cno = #{cno}
+    </select>
+
+    <!--需要的数据类型 {value: 21, name: '男'},{value: 21, name: '女'}-->
+    <select id="sexScale" parameterType="string" resultType="com.ddedu.vo.Sex">
+        select sex as name, count(*) as value from t_student where cno = #{cno} group by sex order by sex
+    </select>
+</mapper>

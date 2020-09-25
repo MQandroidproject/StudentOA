@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>请假申请</title>
+    <link rel="stylesheet" href="media/layui/css/layui.css" media="all">
+    <script type="text/javascript" src="media/js/jquery.min.js"></script>
+    <script src="media/layui/layui.js"></script>
+    <style>
+        #nodo{
+            width: 1000px;
+            height: 500px;
+            border: #9F9F9F solid 2px;
+            border-radius: 7px;
+            margin: 20px 100px;
+        }
+    </style>
+</head>
+<body>
+<div id="nodo">
+    <form class="layui-form" action="" id="form1" lay-filter="example" onsubmit="return false">
+        <div class="layui-form-item" style="margin-top: 70px; width: 500px">
+            <label class="layui-form-label">请假人:</label>
+            <div class="layui-input-block">
+                <input type="text" id="name" name="name" lay-verify="title" autocomplete="off" class="layui-input" disabled>
+            </div>
+        </div>
+        <div class="layui-inline" style="margin-top: 30px">
+            <label class="layui-form-label">请假时间:</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input" name="startTime" id="startTime" placeholder="yyyy-MM-dd HH:mm:ss">
+            </div>
+        </div>
+        <div class="layui-inline" style="margin-top: 30px">
+            <label class="layui-form-label">回校时间:</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input" name="endTime" id="endTime" placeholder="yyyy-MM-dd HH:mm:ss">
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-form-text" style="margin-top: 50px; width: 800px">
+            <label class="layui-form-label">请假理由:</label>
+            <div class="layui-input-block">
+                <textarea placeholder="请输入内容" name="reason" id="reason" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <div style="margin-top: 40px; margin-left: 28%">
+            <button type="button" id="but" class="layui-btn">提交申请</button>
+        </div>
+    </form>
+</div>
+<script>
+    layui.use('laydate', function() {
+        var laydate = layui.laydate;
+        //日期时间选择器
+        laydate.render({
+            elem: '#startTime'
+            ,type: 'datetime'
+        });
+        laydate.render({
+            elem: '#endTime'
+            ,type: 'datetime'
+        });
+    });
+</script>
+<script>
+
+
+    $("#but").click(function () {
+        var name = $("#name").val();
+        console.log(name)
+        console.log($("#form1").serialize())
+        $.ajax({
+            type:'post',
+            url:'AskForLeave/insertLeave.do?name=' + name,
+            data:$("#form1").serialize(),
+            datatype:'json',
+            success:function (data) {
+                if (data.code == 1) {
+                    alert(data.info)
+                    window.location.href="nodo.html";
+                } else {
+                    alert("提交失败！")
+                }
+            }
+        })
+    })
+</script>
+<script>
+    $(function () {
+        $.ajax({
+            type:"get",
+            url:"http://localhost:8080/OaNew/findByNoStu.do",
+            dataType: "json",
+            success:function(data){
+                console.log("data " + data)
+                console.log(data)
+                if(data.code==1){
+                    $("#name").val(data.info.name)
+                }
+            }
+        })
+    })
+</script>
+</body>
+</html>

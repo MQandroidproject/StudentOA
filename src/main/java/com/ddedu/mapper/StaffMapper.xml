@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ddedu.dao.StaffDao">
+    
+    <insert id="add" parameterType="com.ddedu.entity.Staff">
+        insert into t_staff (u_no,name,d_id,flag,sex,email,qq,phone,heading,entryTime,d_name)
+        values (#{u_no},#{name},#{did},#{flag},#{sex},#{email},#{qq},#{phone},#{heading},#{entryTime},#{d_name})
+    </insert>
+    <select id="selectStaffAll" resultType="com.ddedu.entity.Staff">
+        select * from t_staff
+    </select>
+    <select id="selectStaffById" parameterType="int" resultType="com.ddedu.entity.Staff">
+    select * from t_staff where did = #{did} and flag = 1
+</select>
+    <select id="groupByDept" resultType="com.ddedu.vo.DeptCharts">
+        select name,num from t_depart GROUP BY name,num
+    </select>
+    <delete id="del" parameterType="int">
+        delete from t_staff where id=#{id}
+    </delete>
+</mapper>

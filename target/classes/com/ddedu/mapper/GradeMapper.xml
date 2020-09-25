@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ddedu.dao.GradeDao">
+    <!-- 添加一个新开的班级 -->
+    <insert id="insertGrade" parameterType="com.ddedu.entity.Grade">
+        insert into t_grade(
+        <trim suffixOverrides=",">   <!--去除指定的后缀 ， -->
+            <if test="u_no != null"> u_no, </if>
+            <if test="name != null"> name, </if>
+            <if test="createtime != null"> createtime, </if>
+            <if test="flag != null"> flag, </if>
+            <if test="week != null"> week, </if>
+            <if test="location != null"> location, </if>
+        </trim>
+        ) values (
+        <trim suffixOverrides=",">   <!--去除指定的后缀 ， -->
+            <if test="u_no != null"> #{u_no}, </if>
+            <if test="name != null"> #{name}, </if>
+            <if test="createtime != null"> #{createtime}, </if>
+            <if test="flag != null"> #{flag}, </if>
+            <if test="week != null"> #{week}, </if>
+            <if test="location != null"> #{location}, </if>
+        </trim>
+        )
+    </insert>
+
+    <!-- 查询grade所有信息  查询条件可动态添加 -->
+    <select id="selectGradeAll" resultType="com.ddedu.entity.Grade">
+        select * from t_grade
+    </select>
+
+    <!-- 删除班级 -->
+    <delete id="deleteGradeById" parameterType="int">
+        delete from t_grade where id = #{id}
+    </delete>
+
+    <!-- 修改班级信息 -->
+    <update id="updateGrade" parameterType="com.ddedu.entity.Grade">
+        update t_grade
+        <set>
+            <if test="u_no != null"> u_no = #{u_no}, </if>
+            <if test="name != null"> name = #{name}, </if>
+            <if test="createtime != null"> createtime = #{createtime}, </if>
+            <if test="flag != null"> flag = #{flag}, </if>
+            <if test="week != null"> week = #{week}, </if>
+            <if test="location != null"> location = #{location}</if>
+        </set>
+        where id = #{id}
+    </update>
+</mapper>
